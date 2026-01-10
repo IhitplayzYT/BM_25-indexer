@@ -3,6 +3,7 @@
 #define ERRORS
 #include <exception>
 #include <stdexcept>
+#include "utility.h"
 #endif
 
 class PathError : public std::runtime_error {

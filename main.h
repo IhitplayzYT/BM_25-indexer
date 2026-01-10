@@ -15,6 +15,7 @@
 #include <algorithm>
 #include "stopwords.h"
 #include "Stemmer.h"
+#include "utility.h"
 #include "errors.h"
 #endif
 using std::cout, std::cin, std::endl, std::string;
