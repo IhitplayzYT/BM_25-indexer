@@ -15,6 +15,19 @@ else vow = false;
 return c;    
 }
 
+int r1(std::string &arg){
+std::string::size_type l = arg.size(); 
+for (int i = 0 ; i < l-1; i++){
+if (is_vowel(arg[i]) && !is_vowel(arg[i+1])){
+return i;
+}
+}
+return -1;
+}
+
+int 
+
+
 
 
 
@@ -59,13 +72,10 @@ std::vector<std::string> Snowball::stem_input(){
 std::vector<std::string> ret;
 auto vec = this->vec;
 for (auto &s : vec) {
-    
 if (ends_with(s,"sses")) {s.replace(s.length()-4,4,"ss");}
 else if (ends_with(s,"ies")) {s.replace(s.length()-3,3,"i");}
 else if (ends_with(s,"ss")) {continue;}
 else if (ends_with(s,"s")) {s.pop_back();}
-
-
 bool removed = false;
  if (ends_with(s,"ed")) {
         std::string stem = s.substr(0, s.size()-2);
@@ -74,17 +84,14 @@ bool removed = false;
             removed = true;
         }
     }
-else if (ends_with(s,"ing")) {
+ else if (ends_with(s,"ing")) {
     std::string stem = s.substr(0, s.size()-3);
     if (contains_vowel(stem)) {
         s = stem;
         removed = true;
     }
 }
-
 if (!removed) {continue;};
-
-
 if (ends_with(s, "at") || ends_with(s, "bl") || ends_with(s, "iz")){s += "e";}
 else if (double_consonant(s)){
 char c = s[s.length() - 1];

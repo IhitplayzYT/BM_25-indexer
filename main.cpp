@@ -1,6 +1,4 @@
 #include "main.h"
-#include <algorithm>
-
 void usage(string x) {
   cout << "Usage " << x << " [-OPTIMISE=0/1] <FILEPATH> " << endl;
 }
@@ -16,8 +14,6 @@ auto filtered_wordlist = filter_stopwords(text);
 for (auto &s:filtered_wordlist) {
   cout << s << " ";
 }
-cout << endl;
-//std::unique_ptr<Stemmer> stemmer_model = (optimise) ? std::make_unique<Snowball>(filtered_wordlist):std::make_unique<Lanchaster>(filtered_wordlist);
 
 }
 
@@ -53,6 +49,11 @@ std::pair<string,char> get_input(int argc,char ** argv){
      }
   else{
     string s(argv[1]);
+    string opt[2] = {"-OPTIMISE=","-O"};
+    if (s.find(opt[0]) == string::npos && s.find(opt[1]) == string::npos){
+      usage(argv[0]);
+      throw InvalidArgs("Invalid Token found instead of Optimise");
+    }
     optimise = (s[s.length() - 1] == '1' || s[s.length() - 1] == '0') ? s[s.length() - 1] : 3;
     if (optimise == 3) {usage(argv[0]);exit(-1);}
     input_path = argv[2];
