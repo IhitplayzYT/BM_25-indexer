@@ -10,7 +10,7 @@ main: $(objs)
 main.o:main.h errors.h Stemmer.h stopwords.h utility.h
 	g++ $(flags) -c main.cpp
 
-Stemmer.o:Stemmer.h
+Stemmer.o:Stemmer.h utility.h
 	g++ $(flags) -c Stemmer.cpp
 
 stopwords.o:stopwords.h

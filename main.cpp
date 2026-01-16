@@ -1,4 +1,5 @@
 #include "main.h"
+#include "Stemmer.h"
 void usage(string x) {
   cout << "Usage " << x << " [-OPTIMISE=0/1] <FILEPATH> " << endl;
 }
@@ -11,10 +12,12 @@ string text = buff.str();
 std::copy_if(text.begin(),text.end(),text.begin(),[] (char c) {return c != '"' && c != '\'' && c != ',' && c != '.';});
 std::transform(text.begin(),text.end(),text.begin(),[] (char c) {return std::tolower(c);});
 auto filtered_wordlist = filter_stopwords(text);
-for (auto &s:filtered_wordlist) {
+Snowball stemmer(filtered_wordlist);
+auto ret = stemmer.stem_input();
+for (auto &s:ret) {
   cout << s << " ";
 }
-
+cout << endl;
 }
 
 
