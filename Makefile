@@ -1,6 +1,6 @@
 COMPILER := g++
 flags:= -Wall -Wextra -Wpedantic -std=c++20 -g -O0
-objs:=main.o Stemmer.o stopwords.o utility.o bm25.o
+objs:=main.o Stemmer.o stopwords.o utility.o bm25.o fzf_tui.o
 all : clean main
 
 .PHONY:all clean
@@ -22,6 +22,8 @@ utility.o:utility.h
 
 bm25.o : bm25.h
 	$(COMPILER) $(flags) -c bm25.cpp
+fzf_tui.o: fzf_tui.h
+	$(COMPILER) $(flags) -c fzf_tui.cpp
 
 clean:
 	rm -rf *.o main

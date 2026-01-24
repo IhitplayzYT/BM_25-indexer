@@ -115,7 +115,7 @@ return ret;
 
 
 void usage(std::string x) {
-  std::cout << "Usage " << x << " [-OPTIMISE=0/1/2 | -O[0/1/2]] <FILEPATH> " << std::endl << "\t -OPTIMIZE VALUES:" << std::endl <<
+  std::cout << "Usage " << x << " [-OPTIMISE=0/1/2/3 | -O[0/1/2/3]] <FILEPATH> " << std::endl << "\t -OPTIMIZE VALUES:" << std::endl <<
   "\t\t 0: Non Aggressive stopword removal && Snowball Stemmer(Reliable Search)" << std::endl <<
   "\t\t 1: Non Aggressive stopword removal && Lanchaster Stemmer(Quick Search)" << std::endl <<
   "\t\t 2: Aggressive stopword removal && Snowball Stemmer(Reliable Search)" << std::endl << 

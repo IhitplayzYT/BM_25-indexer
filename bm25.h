@@ -1,5 +1,6 @@
 #ifndef bm25
 #define bm25
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -27,3 +28,4 @@ std::pmr::unordered_map<std::string,int> DF(Corpus &);
 double IDF(int,int);
 double BM25_score(Doc &,std::pmr::unordered_map<std::string,int>,double,int,std::vector<std::string>);
 void show_n(int);
+std::vector<int> rank_corpus(Corpus &corp,std::vector<std::string> &query);

@@ -1,4 +1,5 @@
 #include "bm25.h"
+#include <algorithm>
 #include <cmath>
 #include <memory_resource>
 #include <string>
@@ -44,7 +45,7 @@ double IDF(int N,int df){
 
 
 double BM25_score(Doc& doc,std::pmr::unordered_map<std::string,int> df,double avg_doc,int N,std::vector<std::string> query) {
-if (!doc.second.empty() || !avg_doc || !query.empty()) {return 0.0;}
+if (doc.second.empty() || !avg_doc || query.empty()) {return 0.0;}
 double ret(0.0),l(doc.second.size());
 auto tf = TF(doc);
 std::unordered_set<std::string> uniq_query(query.begin(), query.end());
@@ -59,9 +60,24 @@ ret += ((IDF(N,dft)) * (freq * (K1 + 1.0))) / (freq + K1 * (1.0 - B + (B * l/avg
 return ret;
 }
 
+std::vector<int> rank_corpus(Corpus &corp,std::vector<std::string> &query){
+int N = corp.size();
+double avgdl = avg_doc_len(corp);
+auto map = DF(corp);
+std::vector<std::pair<double,int>> scored;
+for (int i = 0 ; i < N ; i++) {
+Doc &doc = corp[i];
+double score = BM25_score(doc,map,avgdl,N,query);
+if (score > 0.0) scored.emplace_back(score,i);
+}
 
-
-
+std::sort(scored.begin(),scored.end(),[](auto &a,auto &b){return a.first > b.first;});
+std::vector<int> ret;
+for (int i = 0 ; i < (int)scored.size();i++){
+ret.push_back(scored[i].second);
+}
+return ret;
+}
 
 
 
