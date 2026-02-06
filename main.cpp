@@ -1,10 +1,12 @@
-#include "main.h"
-#include "Stemmer.h"
-#include "errors.h"
-#include "fzf_tui.h"
-#include "utility.h"
+#include "includes/main.h"
+#include "includes/Stemmer.h"
+#include "includes/errors.h"
+#include "includes/fzf_tui.h"
+#include "includes/stopwords.h"
+#include "includes/utility.h"
 #include <filesystem>
 #include <fstream>
+#include <ostream>
 #include <string>
 #include <vector>
 
@@ -72,7 +74,7 @@ void eval_file(string &input_path,char optimise) {
 }
 
 int main(int argc, char *argv[]) {
-  cout << endl;
+cout << endl;
 auto [input_path,optimise] = get_input(argc,argv);
 enable_mode();
 
@@ -87,13 +89,20 @@ catch (const InvalidIO &e){
   return -1;
 }
 
+//for (Doc &doc : CORPUS){
+//cout << doc.first << ":" << endl;
+//for (string &z:doc.second) cout << z << " ";
+//cout << endl;
+//}
+//int temp;
+//cin >> temp;
+
 string input;
 vector<string> ret;
 vector<int> matches;
 int selected = 0;
 
 while (true){
-
 char c(0);
 Keys k = read_key(c);
 if (k == KEY_ESC) {disable_mode();cout << '\n';return 0;}
@@ -109,7 +118,7 @@ else if (k == KEY_DOWN && selected < (int)matches.size() - 1){
   selected ++;
 }else if (c >= 32 && c <= 126){input.push_back(c);}
 input = preprocess(input);
-auto filtered_wordlist = filter_stopwords(input,optimise >> 1);
+auto filtered_wordlist = tokenize_ws(input);
 if (!(optimise & 1))
 {Snowball stemmer(filtered_wordlist);
 ret = stemmer.stem_input();
@@ -118,9 +127,8 @@ else{
 Lanchaster stemmer(filtered_wordlist);
 ret = stemmer.stem_input();
 }
-
 matches = rank_corpus(CORPUS,ret);
-selected = 0;
+for (auto & match :matches) cout << match << endl;
 draw(input, CORPUS,matches,selected);
 }
   return 0;

@@ -1,4 +1,5 @@
-#include "fzf_tui.h"
+#include "includes/fzf_tui.h"
+#include <ostream>
 #include <termios.h>
 #include <unistd.h>
 extern termios orig_termios;
@@ -12,10 +13,9 @@ void enable_mode(){
     tcgetattr(STDIN_FILENO,&orig_termios);
     atexit(disable_mode);
     termios cur = orig_termios;
-    cur.c_lflag &= ~(ECHO | ICANON /*| ISIG*/);
+    cur.c_lflag &= ~(ECHO | ICANON);
     cur.c_iflag &= ~(IXON | ICRNL);
-    //cur.c_oflag &= ~(OPOST);
-    tcsetattr(STDIN_FILENO,TCSAFLUSH,&cur);
+    tcsetattr(STDIN_FILENO,TCSANOW,&cur);
 }
 
 void clear() {
@@ -57,13 +57,15 @@ return "[No Match]";
 void draw(std::string & query,Corpus& corp,vector<int> matches,int select){
 clear();
 cout << "Query: " << query << "\n\n";
+cout << matches.size() << endl;
 for (int i  = 0 ; i < (int)matches.size(); i++){
 if (i == select) {
     cout <<  "\x1b[7m";;
     cout << (i+1) << ". " << corp[matches[i]].first;
     cout << "\x1b[0m\n";
+}else{
+cout << (i+1) << "." << corp[matches[i]].first << endl;
 }
-
 }
 
 if (!matches.empty()){

@@ -9,4 +9,4 @@
 #endif
 
 std::vector<std::string> filter_stopwords(std::string &,bool);
-
+std::vector<std::string> tokenize_ws(const std::string&);
