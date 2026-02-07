@@ -1,7 +1,9 @@
 #include "includes/fzf_tui.h"
+#include <bits/types/struct_timeval.h>
 #include <ostream>
 #include <termios.h>
 #include <unistd.h>
+#include <sys/select.h>
 extern termios orig_termios;
 
 
@@ -22,11 +24,24 @@ void clear() {
     cout << "\x1b[2J\x1b[H";
 }
 
+
+bool timelimit(int ms){
+    fd_set set;
+    struct timeval tv;
+    FD_ZERO(&set);
+    FD_SET(STDIN_FILENO, &set);
+    tv.tv_usec = ms * 1000;
+    return select(STDIN_FILENO + 1, &set, NULL, NULL, &tv) > 0;
+}
+
+
 Keys read_key(char &out) {
     char c;
     if (read(STDIN_FILENO,&c,1) <= 0) return KEY_NONE;
     switch (c) {
         case 27:{
+            if (!timelimit(10)) 
+                return KEY_ESC;
             char buf[2];
             if ((read(STDIN_FILENO,&buf,2) == 2) && (buf[0] == '[')){
                 return (buf[1] == 'A') ? KEY_UP :(buf[1] == 'B') ? KEY_DOWN : KEY_ESC;

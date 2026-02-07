@@ -3,9 +3,9 @@ flags:= -Wall -Wextra -Wpedantic -std=c++20 -g -O0 -I/includes
 objs:= main.o Stemmer.o stopwords.o utility.o bm25.o fzf_tui.o
 APP := BM25_indexer
 INSTALL_PATH := /usr/bin/$(APP)
-all : clean main sudo_cl
+all : clean BM25_indexer sudo_cl
 
-.PHONY:all clean sudo_cl
+.PHONY:all clean sudo_cl clean install uninstall
 
 BM25_indexer: $(objs)
 	$(COMPILER) $(flags) $^ -o $@
@@ -34,29 +34,20 @@ sudo_cl:
 clean:
 	rm -rf *.o main BM25_indexer
 
-install: BM25_indexer
-	 @if [ "$$EUID" -ne 0 ]; then \
-                echo "Run as ROOT: sudo make install"; \
-                exit 1; \
-    fi; \
-    REAL_USER=$$SUDO_USER; \
-    USER_HOME=$$($(USER_HOME_CMD)); \
-    echo "Installing for user: $$REAL_USER"; \
-    echo "Home: $$USER_HOME"; \
-    \
-    echo "Installing executable to $(INSTALL_PATH)"; \
-    cp $(APP) $(INSTALL_PATH); \
-    chmod +x $(INSTALL_PATH); \
-    \
-	echo "Install complete. Run: $(APP)"
+install: $(APP)
+	@if [ "$$EUID" -ne 0 ]; then \
+		echo "Run with: sudo make install"; \
+		exit 1; \
+	fi
+	@echo "Installing $(APP) to $(INSTALL_PATH)"
+	install -m 755 $(APP) $(INSTALL_PATH)
+	@echo "Done. Run with: $(APP)"
 
 uninstall:
-        @if [ "$$EUID" -ne 0 ]; then \
-                echo "Run with sudo: sudo make uninstall"; \
-                exit 1; \
-        fi; \
-        REAL_USER=$$SUDO_USER; \
-        USER_HOME=$$($(USER_HOME_CMD)); \
-        echo "Removing executable"; \
-        rm -f $(INSTALL_PATH); \
-        echo "Uninstalled."
+	@if [ "$$EUID" -ne 0 ]; then \
+		echo "Run with: sudo make uninstall"; \
+		exit 1; \
+	fi
+	@echo "Removing $(INSTALL_PATH)"
+	rm -f $(INSTALL_PATH)
+	@echo "Uninstalled."

@@ -87,7 +87,6 @@ void eval_file(string &input_path,char optimise) {
 }
 
 int main(int argc, char *argv[]) {
-cout << endl;
 auto [input_path,optimise] = get_input(argc,argv);
 enable_mode();
 
@@ -106,7 +105,6 @@ string input;
 vector<string> ret;
 vector<int> matches;
 int selected = 0;
-
 while (true){
 char c(0);
 Keys k = read_key(c);

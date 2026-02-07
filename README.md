@@ -39,16 +39,22 @@ cd BM_25-indexer
 ```bash
 sudo make install
 ```
-
+4. Restarting the shell sessio
+```bash
+source ~/.bashrc
+```
 
 ## 3. Deleting the executable
 1. Change directory to Repo
 ```bash
 cd BM_25-indexer
 ```
-2.Run the Uninstall rule, Sudo to remove the executable from /usr/bin
+2. Run the Uninstall rule, Sudo to remove the executable from /usr/bin
 ```bash
 sudo make uninstall
 ```
-
+3. Restarting the shell sessio
+```bash
+source ~/.bashrc
+```
 
